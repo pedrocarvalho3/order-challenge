@@ -39,6 +39,13 @@ public class OrderService {
         return toResponse(savedOrder);
     }
 
+    public List<OrderResponse> findAll() {
+        return orderRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
     private OrderResponse toResponse(Order order) {
         List<String> productCodes = order.getItems()
                 .stream()
