@@ -2,9 +2,11 @@ package com.example.orderchallenge.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.tomcat.util.digester.ArrayStack;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -28,4 +30,17 @@ public class Order {
     private String status;
 
     private LocalDateTime createdAt;
+
+    @OneToMany(
+            mappedBy = "order",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @Builder.Default
+    private List<OrderItem> items = new ArrayStack<>();
+
+    public void addItem(OrderItem item) {
+        items.add(item);
+        item.setOrder(this);
+    }
 }
